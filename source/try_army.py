@@ -35,7 +35,7 @@ print("军团番号 - (%d) \n军团名称 - (%s)\n目前人数 - (%d)\n目前总
 
 # 练习二：检阅军队
 print("---练习二---")
-my_first_army.alive = 0
+# my_first_army.alive = 0
 my_first_army.overview()
 
 # 练习三：两只军队交战

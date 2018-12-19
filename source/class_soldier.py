@@ -7,21 +7,7 @@
 #      巩固类的开发方法， 制作一个士兵类
 #
 
-import os
-import sys
-import io
-
-# import pandas as pd
 import random
-
-import numpy as np
-import matplotlib.pylab as plt
-
-# 解决输出显示汉字乱码的问题
-#sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='utf-8')
-# print (sys.stdout.encoding)  # 确认当前的控制台显示字符的编码
-#plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
-#plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
 
 # --- 以下为通用部分， 凡使用士兵类的都要复制过去 -----
 # 设定年龄上限和下限
@@ -42,6 +28,10 @@ min_skill = 1
 class Soldier:
 
     def __init__(self):
+
+        # 士兵姓名
+        self.fullname = ''
+
         # 士兵年纪
         self.age = random.randint(min_age, max_age)
 
@@ -62,6 +52,11 @@ class Soldier:
 
         return
 
+    # 计算士兵的实时战力
     def cal_fighting_capacity(self):
-        fcap = (self.skill ** 3 + self.strength ** 2 + self.equipment) / self.age ** 0.5
+
+        fcap = 0
+        if self.is_alive > 0:
+            fcap = (self.skill ** 3 + self.strength ** 2 + self.equipment) / self.age ** 0.5
+
         return fcap

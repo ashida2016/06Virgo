@@ -10,13 +10,13 @@ import os
 import sys
 import io
 
-from class_soldier import Soldier
-
 import numpy as np
 import matplotlib.pylab as plt
 
 import random
 
+from class_soldier import Soldier
+from class_naming_machine import NamingMachine
 
 # 解决输出显示汉字乱码的问题
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -61,6 +61,12 @@ class Army:
         # 先自动生成 N 个士兵对象
         for i in range(numbers):
             self.soldiers.append(Soldier())
+
+        # 启动一个起名机
+        nm = NamingMachine()
+        # 为每个士兵起名
+        for s in self.soldiers:
+            s.fullname = nm.pick_full_name()
 
         # 对士兵年龄按 正态分布 方式重置
         mu = middle_age
@@ -137,7 +143,7 @@ class Army:
             axs[0].set_title('1)年龄分布图')
 
             # 图二： 力气值分布图（ 横 bar 图 ）
-            y = ['非常大', '较大', '普通', '较小', '很小']
+            y = ['极大', '较大', '普通', '较小', '极小']
             y_pos = np.arange(len(y))
 
             count = [0] * 5 # 划分 5 档显示
