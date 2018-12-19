@@ -18,21 +18,24 @@ from class_army import Army
 #sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 # print (sys.stdout.encoding)  # 确认当前的控制台显示字符的编码
 
-# 练习一： 生成一只 n 人的军队， 并命名
+# 练习一： 招募一只 n 人的军队， 并命名
 print("---练习一---")
 
-soldiers_of_army = 10000
+soldiers_of_army = 300
 
 my_first_army = Army()
 my_first_army.recruit(soldiers_of_army)
-my_first_army.army_name = '我的一号军团'
 
+name = input("请输入军团名称：")
+my_first_army.army_name = name
+
+print("招募了一只军团如下：")
+print("军团番号 - (%d) \n军团名称 - (%s)\n目前人数 - (%d)\n目前总战力 - (%.2f)M" % \
+      (my_first_army.army_code, my_first_army.army_name, my_first_army.alive, my_first_army.cal_fighting_capacity()/1000000))
 
 # 练习二：检阅军队
 print("---练习二---")
-#my_first_army.alive = 0
+my_first_army.alive = 0
 my_first_army.overview()
 
-# 练习三：查看军队的战斗力
-
-
+# 练习三：两只军队交战

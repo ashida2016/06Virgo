@@ -42,19 +42,20 @@ min_skill = 1
 class Army:
 
     def __init__(self):
-        self.army_code = 'Unkown'   # 部队番号
-        self.army_name = 'Unkown'   # 部队名称
+        self.created = 0            # 成立日期（计算机）
+        self.army_code = 'Unkown'   # 军团番号
+        self.army_name = 'Unkown'   # 军团名称
         self.soldiers = []          # 士兵个体
-        self.alive = 0              # 部队存活人数
+        self.alive = 0              # 军团存活人数
         self.fighting_capacity = 0  # 总战斗力
         return
 
     # 招募军队
     def recruit(self, numbers):
 
-        # 为新部队设定番号，默认命名及设定人数
+        # 为新军团设定番号，默认命名及设定人数
         self.army_code = random.randint(1000, 9999)
-        self.army_name = '新兵部队' + str(self.army_code)
+        self.army_name = '新兵军团' + str(self.army_code)
         self.alive = numbers
 
         # 先自动生成 N 个士兵对象
@@ -79,7 +80,7 @@ class Army:
             # 下标 + 1
             i += 1
 
-        # 最后更新部队总战力
+        # 最后更新军团总战力
         self.fighting_capacity = self.cal_fighting_capacity()
 
         return
@@ -88,9 +89,11 @@ class Army:
     def cal_fighting_capacity(self):
 
         fcap = 0
-        for s in self.soldiers:
-            if s.is_alive:
-                fcap += s.skill ** 3 + s.strength ** 2 + s.equipment
+
+        if self.alive > 0:      # 仅当军团还有活人时计算
+            for s in self.soldiers:
+                if s.is_alive:  # 仅当士兵本人还活着时计算
+                    fcap += s.cal_fighting_capacity()   # 永远取士兵的最新战斗力值
 
         return fcap
 
@@ -103,14 +106,13 @@ class Army:
             fig = plt.figure(1)
 
             fig = plt.figure(1)
-            textstr = '部队番号 - (%d) \n部队名称 - (%s)\n目前人数 - (%d)\n目前总战力 - (%.2f)M' % (self.army_code, self.army_name, self.alive, self.cal_fighting_capacity()/1000000)
+            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n目前人数 - (%d)\n目前总战力 - (%.2f)M' % (self.army_code, self.army_name, self.alive, self.cal_fighting_capacity()/1000000)
 
             # these are matplotlib.patch.Patch properties
             props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
             # place a text box in upper left in axes coords
             plt.text(0.2, 0.8, textstr, fontsize=20,  horizontalalignment='left', verticalalignment='center', bbox=props)
-            plt.show()
 
             # 准备3个图 （ 一行三列 ）
             fig, axs = plt.subplots(1, 3)
@@ -138,20 +140,21 @@ class Army:
             y = ['非常大', '较大', '普通', '较小', '很小']
             y_pos = np.arange(len(y))
 
-            count = [0] * 5
+            count = [0] * 5 # 划分 5 档显示
             for s in self.soldiers:
                 if s.is_alive:
                     if s.strength <= 20:
-                        count[0] += 1
+                        count[4] += 1
                     elif s.strength <= 40:
-                        count[1] += 1
+                        count[3] += 1
                     elif s.strength <= 60:
                         count[2] += 1
                     elif s.strength <= 80:
-                        count[3] += 1
+                        count[1] += 1
                     else:
-                        count[4] += 1
+                        count[0] += 1
 
+            print(count)
             axs[1].barh(y_pos, count, color='green')
             axs[1].set_yticks(y_pos)
             axs[1].set_yticklabels(y)
@@ -178,25 +181,24 @@ class Army:
                         colors.append('yellow')
                     i += 1
 
-            area = 5 # 原点面积
+            area = 3       # 原点面积固定
             axs[2].scatter(x, y, s=area, c=colors)
             axs[2].set_xlabel('战斗技巧范围 %d-%d ' % (min_skill, max_skill))
             axs[2].set_ylabel('三档分类')
-            axs[2].set_title('2)战斗分布图')
+            axs[2].set_title('2)战斗技巧分布图')
 
             plt.show()
 
         else:
 
             fig = plt.figure(1)
-            textstr = '此军队已经全部阵亡！'
+            textstr = '此军队已经全部阵亡！\n军团番号 - (%d) \n军团名称 - (%s)\n目前人数 - (%d)\n目前总战力 - (%.2f)M' % (self.army_code, self.army_name, self.alive, self.cal_fighting_capacity()/1000000)
 
             # these are matplotlib.patch.Patch properties
-            props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
+            props = dict(boxstyle='round', facecolor='red', alpha=0.5)
 
             # place a text box in upper left in axes coords
-            plt.text(1, 1, textstr, fontsize=20,  horizontalalignment='center', verticalalignment='center', bbox=props)
+            plt.text(0.2, 0.8, textstr, fontsize=20,  horizontalalignment='left', verticalalignment='center', bbox=props)
             plt.show()
 
         return
-

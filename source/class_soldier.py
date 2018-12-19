@@ -57,5 +57,11 @@ class Soldier:
         # 该士兵是否还活着
         self.is_alive = 1
 
+        # 士兵个人战斗力
+        self.fighting_capacity = self.cal_fighting_capacity()
+
         return
 
+    def cal_fighting_capacity(self):
+        fcap = (self.skill ** 3 + self.strength ** 2 + self.equipment) / self.age ** 0.5
+        return fcap
