@@ -9,7 +9,6 @@
 import os
 import sys
 import io
-import datetime
 
 from class_soldier import Soldier
 from class_naming_machine import NamingMachine

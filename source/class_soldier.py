@@ -40,7 +40,7 @@ class Soldier:
         nm = NamingMachine()
         self.fullname = nm.pick_full_name()
 
-        # 士兵入伍时间
+        # 士兵入伍日期
         self.attended_time = datetime.datetime.now()
 
         # 士兵年纪，初始值随机，
@@ -51,11 +51,14 @@ class Soldier:
         # 士兵初始力气
         self.strength = random.uniform(cst.min_strength, cst.max_strength * 0.9)
 
+        # 士兵的当前体力
+        self.power = cst.max_power
+
         # 士兵初始战斗技巧
         self.skill = random.uniform(cst.min_skill, cst.max_skill * 0.5)
 
         # 士兵初始战斗经验
-        self.experience  = random.uniform(cst.min_experice, cst.max_experice * 0.5)
+        self.experience = random.uniform(cst.min_experice, cst.max_experice * 0.5)
 
         # 士兵初始战斗装备一律为无
         self.equipment = 0
@@ -76,7 +79,26 @@ class Soldier:
 
         fcap = 0
         if self.is_alive > 0:
-            fcap = (self.skill ** 3 + self.strength ** 2 + self.experience ** 2 + self.equipment) / self.age ** 0.5
+            # 0 体力时战斗力为 0%， 100体力时战斗力为 100%
+            fcap = ((self.skill ** 3 + self.strength ** 2 + self.experience ** 2 + self.equipment) / self.age ** 0.5) * self.power / 100
 
         return fcap
+    
+    # 士兵自我汇报信息
+    def report_me(self):
+
+        s_live_die = ''
+        if self.is_alive > 0:
+            s_live_die = '(√ 活着)'
+        else:
+            s_live_die = '(★ 阵亡)'
+
+
+        print("我叫 %s%s， 年龄 %d， 入伍日期 %s， 力气值 %.2f, 战斗技巧 %.2f，战斗经验 %.2f， 战斗装备 %d， 当前体力 %d， 当前战力 %.2f" % \
+              (self.fullname, s_live_die, self.age, self.attended_time.strftime('%Y-%m-%d %H:%M:%S'), \
+               self.strength, self.skill, self.experience, self.equipment, \
+               self.power, self.cal_fighting_capacity()
+               ))
+        
+        return 
 

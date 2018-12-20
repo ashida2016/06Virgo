@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 
-# Filename : try_draw4.py
+# Filename : try_army.py
 # author by : （学员ID)
 
 # 目的： 进一步了解制作数列的 np.arange
@@ -10,7 +10,6 @@ import os
 import sys
 import io
 
-#from class_soldier import Soldier
 from class_army import Army
 from class_save_read_army import SaveReadArmy
 
@@ -22,7 +21,7 @@ from class_save_read_army import SaveReadArmy
 # 练习一： 招募一只 n 人的军队， 并命名
 print("---练习一---")
 
-soldiers_of_army = 5
+soldiers_of_army = 10
 
 my_first_army = Army()
 my_first_army.recruit(soldiers_of_army)
@@ -53,6 +52,7 @@ print("开始训练 1 次......")
 
 before = my_first_army.cal_fighting_capacity()
 my_first_army.training()
+my_first_army.recuperate()    # 训练一次后必须马上恢复体力才能得出正确的战力值
 after = my_first_army.cal_fighting_capacity()
 
 print("本次训练前战力为： %.2f,  本次训练后战力为： %.2f， 提升了 %.2f 的战力，提升比例为 %.1f%%" % \
@@ -65,6 +65,7 @@ print("开始训练 %d 次......" %(times))
 before = my_first_army.cal_fighting_capacity()
 for i in range(1, times):
       my_first_army.training()
+      my_first_army.recuperate()  # 训练一次后必须马上恢复体力才能得出正确的战力值
 after = my_first_army.cal_fighting_capacity()
 
 print("本次训练前战力为： %.2f,  本次训练后战力为： %.2f， 提升了 %.2f 的战力，提升比例为 %.1f%%" % \

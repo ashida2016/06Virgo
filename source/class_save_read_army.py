@@ -108,21 +108,13 @@ class SaveReadArmy:
             rtn_solider.attended_time = datetime.datetime.strptime(time_str, '%Y-%m-%d %H:%M:%S')
             rtn_solider.age = d['士兵年龄']
             rtn_solider.strength = d['士兵力气']
+            rtn_solider.power = d['士兵体力']
             rtn_solider.skill = d['战斗技巧']
             rtn_solider.experience = d['战斗经验']
             rtn_solider.equipment = d['战斗装备']
             rtn_solider.is_alive = d['是否活着']
 
             rtn_army.soldiers.append(rtn_solider)
-
-
-        """
-        # 更新军队的人数
-        rtn_army.alives = 0
-        for s in rtn_army.soliders:
-            if s.is_alive:
-                rtn_army.alives += 1
-        """
 
         f.close()
 
@@ -135,6 +127,7 @@ class SaveReadArmy:
             '入伍日期': soliders_obj.attended_time.strftime('%Y-%m-%d %H:%M:%S'),
             '士兵年龄': soliders_obj.age,
             '士兵力气': soliders_obj.strength,
+            '士兵体力': soliders_obj.power,
             '战斗技巧': soliders_obj.skill,
             '战斗经验': soliders_obj.experience,
             '战斗装备': soliders_obj.equipment,

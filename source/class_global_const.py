@@ -21,6 +21,10 @@ class GlobalConst:
         self.max_strength = 100
         self.min_strength = 1
 
+        # 设定体力上下限
+        self.max_power = 100
+        self.min_power = 0
+
         # 设定战斗技巧上下限
         self.max_skill = 100
         self.min_skill = 1

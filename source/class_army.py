@@ -16,10 +16,9 @@ import matplotlib.pylab as plt
 import random
 import datetime
 
-import json
 
 from class_soldier import Soldier
-#from class_save_read_army import SaveReadArmy
+from class_global_const import GlobalConst
 
 # 解决输出显示汉字乱码的问题
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -27,7 +26,6 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
 plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
 
-from class_global_const import GlobalConst
 
 
 class Army:
@@ -97,13 +95,24 @@ class Army:
     def cal_fighting_capacity(self):
 
         fcap = 0
-
         if self.alives > 0:      # 仅当军团还有活人时计算
             for s in self.soldiers:
                 if s.is_alive:  # 仅当士兵本人还活着时计算
                     fcap += s.cal_fighting_capacity()   # 永远取士兵的最新战斗力值
 
         return fcap
+
+    # 计算军队平均体力
+    def cal_average_power(self):
+        tp = 0
+        ap = 0
+        if self.alives > 0:         # 仅当军团还有活人时计算
+            for s in self.soldiers:
+                if s.is_alive:      # 仅当士兵本人还活着时计算
+                    tp += s.power   # 永远取士兵的最新体力值
+            ap = tp / self.alives
+
+        return ap
 
     # 复杂模式查看军队 - 绘制军队全景图
     def overview(self):
@@ -113,10 +122,10 @@ class Army:
             # 汇总显示
             fig = plt.figure(1)
 
-            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前总战力 - (%.2f)K' % \
+            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前战力 - (%.2f)K\n平均体力 - (%.2f)' % \
                       (self.army_code, self.army_name, \
                        self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                      self.alives, self.cal_fighting_capacity()/1000)
+                      self.alives, self.cal_fighting_capacity()/1000, self.cal_average_power())
 
             # these are matplotlib.patch.Patch properties
             props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
@@ -202,10 +211,10 @@ class Army:
         else:
 
             fig = plt.figure(3)
-            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前总战力 - (%.2f)K' % \
+            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前战力 - (%.2f)K\n平均体力 - (%.2f)' % \
                       (self.army_code, self.army_name, \
                        self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                      self.alives, self.cal_fighting_capacity()/1000)
+                      self.alives, self.cal_fighting_capacity()/1000, self.cal_average_power())
             textstr = '此军队已经全部阵亡！\n' + textstr
 
             # these are matplotlib.patch.Patch properties
@@ -220,27 +229,34 @@ class Army:
     # 简易模式查看军队 - 命令行输出
     def simple_view(self):
 
-        textstr = '******\r军团番号 - (%d) \t军团名称 - (%s)\n成立时间 - (%s)\t解散日期 - (%s)\n当前人数 - (%d)\t当前战力 - (%.2f)K' % \
+        textstr = '******\r军团番号 - (%d) \t军团名称 - (%s)\n成立时间 - (%s)\t解散日期 - (%s)\n当前人数 - (%d)\t当前战力 - (%.2f)K\t平均体力 - (%.2f)' % \
                   (self.army_code, self.army_name, \
                    self.created.strftime('%Y-%m-%d %H:%M:%S'),
                    self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                   self.alives, self.cal_fighting_capacity() )
+                   self.alives, self.cal_fighting_capacity(), self.cal_average_power())
         print(textstr)
 
         return
 
-        # 训练军队
+    # 训练军队
     def training(self):
 
         if self.alives > 0:
             for s in self.soldiers:
                 if s.is_alive:
+                    # 每次训练提升 0-0.1 力气
                     if s.strength < self.cst.max_strength:
                         s.strength += random.random() / 10
+                    # 每次训练提升 0-0.1 技巧
                     if s.skill < self.cst.max_skill:
                         s.skill += random.random() / 10
+                    # 每次训练提升 0-0.1 经验
                     if s.experience < self.cst.max_experice:
                         s.experience += random.random() / 10
+                    # 每次训练会少 10 个体力值
+                    s.power -= 10
+                    if s.power < self.cst.min_power:
+                        s.power = self.cst.min_power
 
         return
 
@@ -291,6 +307,7 @@ class Army:
                 s.attended_time = new_man.attended_time
                 s.age = new_man.age
                 s.strength = new_man.strength
+                s.power = new_man.power
                 s.skill = new_man.skill
                 s.experience = new_man.experience
                 s.equipment = new_man.equipment
@@ -304,4 +321,13 @@ class Army:
 
         return replaced   # 返回剩余的补充名额
 
+    # 休养军队（补充当前体力）
+    def recuperate(self):
 
+        for s in self.soldiers:
+            if s.is_alive:
+                s.power += 30  # 每次休养补充 30 体力
+                if s.power > self.cst.max_power:
+                    s.power = self.cst.max_power
+
+        return
