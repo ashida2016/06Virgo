@@ -3,7 +3,7 @@
 # Filename : class_army.py
 # author by : （学员ID)
 
-# 目的：
+# 目的:
 #
 
 import os
@@ -16,8 +16,10 @@ import matplotlib.pylab as plt
 import random
 import datetime
 
+import json
+
 from class_soldier import Soldier
-from class_naming_machine import NamingMachine
+#from class_save_read_army import SaveReadArmy
 
 # 解决输出显示汉字乱码的问题
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
@@ -25,25 +27,8 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
 plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
 
-
 from class_global_const import GlobalConst
 
-"""
-# --- 以下为通用部分， 凡使用士兵类的都要复制过去 -----
-# 设定年龄上限和下限
-max_age = 60
-min_age = 16
-middle_age = (max_age + min_age) / 2
-
-# 设定力气值上下限
-max_strength = 90
-min_strength = 30
-
-# 设定战斗技巧上下限
-max_skill = 50
-min_skill = 1
-# --- 以上为通用部分， 凡使用士兵类的都要复制过去 -----
-"""
 
 class Army:
 
@@ -58,7 +43,7 @@ class Army:
 
         self.soldiers = []          # 士兵个体
         self.alives = 0             # 军团存活人数
-        self.fighting_capacity = 0  # 总战斗力
+        #self.fighting_capacity = 0  # 总战斗力     # 战力实时计算
 
         return
 
@@ -142,7 +127,7 @@ class Army:
             # 准备3个图 （ 一行三列 ）
             fig, axs = plt.subplots(1, 3)
 
-            # 图一： 年龄分布图 （ bar 图）
+            # 图一: 年龄分布图 （ bar 图）
             # 生成 x 坐标 - 年龄
             x = []
             for i in range(self.cst.min_age, self.cst.max_age + 1):
@@ -161,7 +146,7 @@ class Army:
             axs[0].set_ylabel('该年龄的人数')
             axs[0].set_title('1)年龄分布图')
 
-            # 图二： 力气值分布图（ 横 bar 图 ）
+            # 图二: 力气值分布图（ 横 bar 图 ）
             y = ['极大', '较大', '普通', '较小', '极小']
             y_pos = np.arange(len(y))
 
@@ -189,7 +174,7 @@ class Army:
             axs[1].set_ylabel('五档分类， 力气值范围 %d-%d ' % (self.cst.min_strength, self.cst.max_strength))
             axs[1].set_title('2)士兵力气分布图')
 
-            # 图三： 战斗技巧分布图（散点图）
+            # 图三: 战斗技巧分布图（散点图）
             x = []
             y = []
             colors = []
@@ -235,7 +220,7 @@ class Army:
     # 简易模式查看军队 - 命令行输出
     def simple_view(self):
 
-        textstr = '******\r军团番号 - (%d) \t军团名称 - (%s)\n成立时间 - (%s)\t解散时间 - (%s)\n当前人数 - (%d)\t当前战力 - (%.2f)K' % \
+        textstr = '******\r军团番号 - (%d) \t军团名称 - (%s)\n成立时间 - (%s)\t解散日期 - (%s)\n当前人数 - (%d)\t当前战力 - (%.2f)K' % \
                   (self.army_code, self.army_name, \
                    self.created.strftime('%Y-%m-%d %H:%M:%S'),
                    self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
@@ -318,3 +303,5 @@ class Army:
                 break
 
         return replaced   # 返回剩余的补充名额
+
+
