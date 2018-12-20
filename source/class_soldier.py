@@ -8,7 +8,10 @@
 #
 
 import random
+import datetime
 
+from class_global_const import GlobalConst
+"""
 # --- 以下为通用部分， 凡使用士兵类的都要复制过去 -----
 # 设定年龄上限和下限
 max_age = 60
@@ -23,29 +26,40 @@ min_strength = 30
 max_skill = 50
 min_skill = 1
 # --- 以上为通用部分， 凡使用士兵类的都要复制过去 -----
-
+"""
 
 class Soldier:
 
     def __init__(self):
 
-        # 士兵姓名
+        cst = GlobalConst()
+
+        # 士兵姓名，初始值为无名氏
         self.fullname = ''
 
-        # 士兵年纪
-        self.age = random.randint(min_age, max_age)
+        # 士兵入伍时间
+        self.attended_time = datetime.datetime.now()
+
+        # 士兵年纪，初始值随机，组建军队时必须按正态分布重置
+        self.age = random.randint(cst.min_age, cst.max_age)
 
         # 士兵初始力气
-        self.strength = random.randint(min_strength, max_strength)
+        self.strength = random.uniform(cst.min_strength, cst.max_strength * 0.9)
 
         # 士兵初始战斗技巧
-        self.skill = random.randint(min_skill, max_skill)
+        self.skill = random.uniform(cst.min_skill, cst.max_skill * 0.5)
+
+        # 士兵初始战斗经验
+        self.experience  = random.uniform(cst.min_experice, cst.max_experice * 0.5)
 
         # 士兵初始战斗装备一律为无
         self.equipment = 0
 
         # 该士兵是否还活着
         self.is_alive = 1
+
+        # 士兵死亡时间
+        # self.death_time = cst.forever
 
         # 士兵个人战斗力
         self.fighting_capacity = self.cal_fighting_capacity()
@@ -57,6 +71,6 @@ class Soldier:
 
         fcap = 0
         if self.is_alive > 0:
-            fcap = (self.skill ** 3 + self.strength ** 2 + self.equipment) / self.age ** 0.5
+            fcap = (self.skill ** 3 + self.strength ** 2 + self.experience ** 2 + self.equipment) / self.age ** 0.5
 
         return fcap
