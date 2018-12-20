@@ -11,6 +11,8 @@ import random
 import datetime
 
 from class_global_const import GlobalConst
+from class_naming_machine import NamingMachine
+
 """
 # --- 以下为通用部分， 凡使用士兵类的都要复制过去 -----
 # 设定年龄上限和下限
@@ -34,13 +36,16 @@ class Soldier:
 
         cst = GlobalConst()
 
-        # 士兵姓名，初始值为无名氏
-        self.fullname = ''
+        # 启动一个起名机，为士兵取名
+        nm = NamingMachine()
+        self.fullname = nm.pick_full_name()
 
         # 士兵入伍时间
         self.attended_time = datetime.datetime.now()
 
-        # 士兵年纪，初始值随机，组建军队时必须按正态分布重置
+        # 士兵年纪，初始值随机，
+        # 组建军队时会被按正态分布重置
+        # 补充兵员时会随机生成
         self.age = random.randint(cst.min_age, cst.max_age)
 
         # 士兵初始力气
@@ -61,8 +66,8 @@ class Soldier:
         # 士兵死亡时间
         # self.death_time = cst.forever
 
-        # 士兵个人战斗力
-        self.fighting_capacity = self.cal_fighting_capacity()
+        # 士兵个人战斗力，均为实时计算，不存储
+        # self.fighting_capacity = self.cal_fighting_capacity()
 
         return
 
@@ -74,3 +79,4 @@ class Soldier:
             fcap = (self.skill ** 3 + self.strength ** 2 + self.experience ** 2 + self.equipment) / self.age ** 0.5
 
         return fcap
+

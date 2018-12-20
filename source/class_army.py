@@ -74,12 +74,6 @@ class Army:
         for i in range(numbers):
             self.soldiers.append(Soldier())
 
-        # 启动一个起名机
-        nm = NamingMachine()
-        # 为每个士兵起名
-        for s in self.soldiers:
-            s.fullname = nm.pick_full_name()
-
         # 对士兵年龄按 正态分布 方式重置
         mu = self.cst.middle_age
         sigma = int(self.cst.middle_age / 4 - 1)
@@ -98,8 +92,8 @@ class Army:
             # 下标 + 1
             i += 1
 
-        # 最后更新军团总战力
-        self.fighting_capacity = self.cal_fighting_capacity()
+        # 最后更新军团总战力，战力均为实时计算，不保存
+        # self.fighting_capacity = self.cal_fighting_capacity()
 
         return
 
@@ -126,7 +120,7 @@ class Army:
 
         return fcap
 
-    # 绘制军队全景图
+    # 复杂模式查看军队 - 绘制军队全景图
     def overview(self):
 
         if self.alives > 0:
@@ -134,10 +128,10 @@ class Army:
             # 汇总显示
             fig = plt.figure(1)
 
-            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前总战力 - (%.2f)M' % \
+            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前总战力 - (%.2f)K' % \
                       (self.army_code, self.army_name, \
                        self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                      self.alives, self.cal_fighting_capacity()/1000000)
+                      self.alives, self.cal_fighting_capacity()/1000)
 
             # these are matplotlib.patch.Patch properties
             props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
@@ -185,7 +179,7 @@ class Army:
                     else:
                         count[0] += 1
 
-            print(count)
+            # print(count)
             axs[1].barh(y_pos, count, color='green')
             axs[1].set_yticks(y_pos)
             axs[1].set_yticklabels(y)
@@ -223,10 +217,10 @@ class Army:
         else:
 
             fig = plt.figure(3)
-            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前总战力 - (%.2f)M' % \
+            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前总战力 - (%.2f)K' % \
                       (self.army_code, self.army_name, \
                        self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                      self.alives, self.cal_fighting_capacity()/1000000)
+                      self.alives, self.cal_fighting_capacity()/1000)
             textstr = '此军队已经全部阵亡！\n' + textstr
 
             # these are matplotlib.patch.Patch properties
@@ -238,7 +232,19 @@ class Army:
 
         return
 
-    # 训练军队
+    # 简易模式查看军队 - 命令行输出
+    def simple_view(self):
+
+        textstr = '******\r军团番号 - (%d) \t军团名称 - (%s)\n成立时间 - (%s)\t解散时间 - (%s)\n当前人数 - (%d)\t当前战力 - (%.2f)K' % \
+                  (self.army_code, self.army_name, \
+                   self.created.strftime('%Y-%m-%d %H:%M:%S'),
+                   self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
+                   self.alives, self.cal_fighting_capacity() )
+        print(textstr)
+
+        return
+
+        # 训练军队
     def training(self):
 
         if self.alives > 0:
@@ -253,14 +259,62 @@ class Army:
 
         return
 
-    # 简易查看模式
-    def simple_view(self):
+    # 军队的自然老化
+    def aged(self, years):
 
-        textstr = '******\r军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n当前人数 - (%d)\n当前战力 - (%.2f)M' % \
-                  (self.army_code, self.army_name, \
-                   self.created.strftime('%Y-%m-%d %H:%M:%S'),
-                   self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                   self.alives, self.cal_fighting_capacity() / 1000000)
-        print(textstr)
-        
-        return 
+        for s in self.soldiers:
+            # 仅当士兵存活时才会生长
+            if s.is_alive:
+                # 年龄大于60岁将退出军队
+                s.age += years
+                if s.age > self.cst.max_age:
+                    s.is_alive = 0
+                else:
+                    # 力气随着岁数增长而变化
+                    # 30岁前每年 + 1, 31 - 45 不变，46 - 60 每年 - 2
+                    # min,max为限
+                    if s.age <= 30:
+                        s.strength += 1
+                        if s.strength > self.cst.max_strength:
+                            s.strength = self.cst.max_strength
+                    elif s.age >= 40:
+                        s.strength -= 2
+                        if s.strength < self.cst.min_strength:
+                            s.strength = self.cst.min_strength
+
+                    # 经验随着年龄的增长而增长
+                    s.experience += 0.2
+                    if s.experience > self.cst.max_experice:
+                        s.experience = self.cst.max_experice
+
+        # 重新更新军队人数
+        self.alives = 0
+        for s in self.soldiers:
+            if s.is_alive:
+                self.alives += 1
+
+        return
+
+    # 补充军队
+    def replacement(self, numbers):
+        replaced = 0
+        for s in self.soldiers:
+            if not s.is_alive:
+                new_man = Soldier()       # 新招一个士兵
+                # 将新兵的属性赋予这个空人
+                s.fullname = new_man.fullname
+                s.attended_time = new_man.attended_time
+                s.age = new_man.age
+                s.strength = new_man.strength
+                s.skill = new_man.skill
+                s.experience = new_man.experience
+                s.equipment = new_man.equipment
+                s.is_alive = new_man.is_alive
+
+                replaced += 1       # 用掉了一个补充名额
+                self.alives += 1    # 军队总存活人数 +1
+
+            if replaced >= numbers: # 当用完招聘名额时结束
+                break
+
+        return replaced   # 返回剩余的补充名额
