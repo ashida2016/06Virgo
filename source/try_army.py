@@ -15,7 +15,7 @@ from class_save_read_army import SaveReadArmy
 
 
 # 解决输出显示汉字乱码的问题
-#sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 # print (sys.stdout.encoding)  # 确认当前的控制台显示字符的编码
 
 # 练习一： 招募一只 n 人的军队， 并命名
@@ -26,7 +26,8 @@ soldiers_of_army = 10
 my_first_army = Army()
 my_first_army.recruit(soldiers_of_army)
 
-name = input("请输入军团名称：")
+#name = input("请输入军团名称：")
+name = 'ATOM'
 my_first_army.army_name = name
 
 print("招募了一只军团如下：")

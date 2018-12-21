@@ -22,27 +22,28 @@ from class_soldier import Soldier
 from class_army import Army
 
 class SaveReadArmy:
-    
+
     def __init__(self, army):
 
         # 确定要写入的文件路径
         # for ATOM
         # csv_path = os.getcwd() + '\\' + 'config\\all_atoms.csv'
-        # self.fpath_army = os.getcwd() + '\\' + 'armies\\' + self.army_name + '-' + str(self.army_code) + '.json'
-        # self.fpath_soldier = os.getcwd() + '\\' + 'armies\\' + self.army_name + '-' + str(self.army_code) + '-' + '士兵们.json'
+        self.fpath_army = os.getcwd() + '\\armies\\' + army.army_name + '-' + str(army.army_code) + '.json'
+        self.fpath_soldier = os.getcwd() + '\\armies\\' + army.army_name + '-' + str(army.army_code) + '-' + '士兵们.json'
         # for cmd Python
         # csv_path = os.getcwd() + '\\' + '..\\config\\all_atoms.csv'
-        # self.fpath_army = os.getcwd() + '\\' + '..\\armies\\' + self.army_name + '-' + str(self.army_code) + '.json'
-        # self.fpath_soldier = os.getcwd() + '\\' + '..\\armies\\' + self.army_name + '-' + str(self.army_code) + '-' + '士兵们.json'
+        # self.fpath_army = os.getcwd() + '\\' + '..\\armies\\' + army.army_name + '-' + str(army.army_code) + '.json'
+        # self.fpath_soldier = os.getcwd() + '\\' + '..\\armies\\' + army.army_name + '-' + str(army.army_code) + '-' + '士兵们.json'
         # for PyCharm
-        self.fpath_army = '..\\armies\\' + army.army_name + '_' + str(army.army_code) + '.json'
-        self.fpath_soldier = '..\\armies\\' + army.army_name + '_' + str(army.army_code) + '_' + '士兵们.json'
+        # self.fpath_army = '..\\armies\\' + army.army_name + '_' + str(army.army_code) + '.json'
+        # self.fpath_soldier = '..\\armies\\' + army.army_name + '_' + str(army.army_code) + '_' + '士兵们.json'
 
         return
 
     # 保存一只军队的所有信息至2个文件
     def save_army(self, army):
 
+        # print(self.fpath_army)
         f = open(self.fpath_army, 'w')  # write 方式写 - indent=4 表示分行
 
         json_str = json.dumps(army, indent=4, default=self._army2json, ensure_ascii=False)
@@ -62,19 +63,17 @@ class SaveReadArmy:
 
         # 确定要读出的文件路径
         # for ATOM
-        # csv_path = os.getcwd() + '\\' + 'config\\all_atoms.csv'
-        # self.fpath_army = os.getcwd() + '\\' + 'armies\\' + self.army_name + '-' + str(self.army_code) + '.json'
-        # self.fpath_soldier = os.getcwd() + '\\' + 'armies\\' + self.army_name + '-' + str(self.army_code) + '-' + '士兵们.json'
+        self.fpath_army = os.getcwd() + '\\armies\\' + name + '-' + str(code) + '.json'
+        self.fpath_soldier = os.getcwd() + '\\armies\\' + name + '-' + str(code) + '-' + '士兵们.json'
         # for cmd Python
-        # csv_path = os.getcwd() + '\\' + '..\\config\\all_atoms.csv'
-        # self.fpath_army = os.getcwd() + '\\' + '..\\armies\\' + self.army_name + '-' + str(self.army_code) + '.json'
-        # self.fpath_soldier = os.getcwd() + '\\' + '..\\armies\\' + self.army_name + '-' + str(self.army_code) + '-' + '士兵们.json'
+        # self.fpath_army = os.getcwd() + '\\..\\armies\\' + name + '-' + str(code) + '.json'
+        # self.fpath_soldier = os.getcwd() + '\\..\\armies\\' + name + '-' + str(code) + '-' + '士兵们.json'
         # for PyCharm
-        fp_army = '..\\armies\\' + name + '_' + str(code) + '.json'
-        fp_soldier = '..\\armies\\' + name + '_' + str(code) + '_' + '士兵们.json'
+        # self.fp_army = '..\\armies\\' + name + '_' + str(code) + '.json'
+        # self.fp_soldier = '..\\armies\\' + name + '_' + str(code) + '_' + '士兵们.json'
 
         # 读取概要信息
-        f = open(fp_army, 'r')  # read 方式读
+        f = open(self.fpath_army, 'r')  # read 方式读
 
         # line = f.readline()
         # d = json.loads(line)    # 将读入的 json 字串转化为一个 dict
@@ -95,12 +94,12 @@ class SaveReadArmy:
         f.close()
 
         # 读取士兵们的信息
-        f = open(fp_soldier, 'r')  # read 方式读
+        f = open(self.fpath_soldier, 'r')  # read 方式读
 
         # line = f.readline()
         # ds = json.loads(line)   # 将读入的 json 字串转化为一个 dict 列表
         ds = json.load(f)   # 将整个 json 文件读入
-        
+
         for d in ds:
             rtn_solider = Soldier()
             rtn_solider.fullname = d['士兵姓名']
@@ -147,7 +146,7 @@ class SaveReadArmy:
         }
         return data
 
-    """        
+    """
     # 将 json 字串反序列化成 solider 对象
     def _json2solider(self, d):
         return
@@ -157,4 +156,3 @@ class SaveReadArmy:
         return Army(d['军团番号'], d['军团名称'], d['成立日期'], d['解散日期'], d['当前人数'], d['当前战力'])
 
     """
-

@@ -35,17 +35,22 @@ min_skill = 1
 """
 
 # 练习一：产生一个士兵
-print("---练习一---")
+print("\n---练习一---")
 
 soldier = Soldier()
 nm = NamingMachine()
 soldier.fullname = nm.pick_full_name()
+soldier.report_me()
 
+"""
 print("这个士兵叫(%s)，入伍日期为(%s)，年龄为 (%d), 力气值(%d), 战斗技巧(%d), 战斗经验(%d), 装备(%d), 战斗力(%0.1f)" %  \
         (soldier.fullname, soldier.attended_time.strftime("%Y-%m-%d %H:%M:%S"), \
          soldier.age, soldier.strength, soldier.skill, soldier.experience, soldier.equipment, soldier.fighting_capacity))
+"""
 
 # 练习二：产生 100个士兵，选出战斗力最高的士兵打印出其信息
+print("\n---练习二---")
+
 numbers = 100
 soldiers = []
 max_fcap = -1
@@ -54,14 +59,18 @@ for i in range(numbers):
     s = Soldier()
     s.fullname = nm.pick_full_name()
     soldiers.append(s)
-    if s.fighting_capacity > max_fcap:
-        max_fcap = s.fighting_capacity
+    if s.cal_fighting_capacity() > max_fcap:
+        max_fcap = s.cal_fighting_capacity()
         max_index = i
 
+print("挑选出战斗力最强的士兵了....")
+soldiers[max_index].report_me()
+"""
 print("\n战斗力最强的士兵叫(%s), 入伍日期为 （%s), 年龄为 (%d), 力气值(%d), 战斗技巧(%d), 战斗经验（%d), 装备(%d), 战斗力(%0.1f)" % \
         (soldiers[max_index].fullname, soldiers[max_index].attended_time.strftime("%Y-%m-%d %H:%M:%S"), \
          soldiers[max_index].age, soldiers[max_index].strength,  soldiers[max_index].experience, \
          soldiers[max_index].skill, soldiers[max_index].equipment, soldiers[max_index].fighting_capacity))
+"""
 
 # 练习三：计算两个士兵的交战
 
