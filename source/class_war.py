@@ -54,9 +54,9 @@ class War:
             # 士兵捉对厮杀次数默认为人数少的一方 * n
             fight_times = 0
             if attacker.alives > defender.alives:
-                fight_times = defender.alives * 2
+                fight_times = int(defender.alives * 1.5)
             else:
-                fight_times = attacker.alives * 2
+                fight_times = int(attacker.alives * 1.5)
 
             for i in range(fight_times):
                 s1 = self.pick_a_soldier(attacker)

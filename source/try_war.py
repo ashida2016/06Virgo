@@ -40,23 +40,24 @@ sd2.report_me()
 # 练习二： 随机生成2只军队，让其进行战斗
 print("\n---练习二---")
 
-soldiers_of_army = 500000
+soldiers_of_army = 100000
 my_first_army = Army()
 my_first_army.recruit(soldiers_of_army)
 my_first_army.army_name = '岳家军'
 # 仅对第一只军队进行训练
-for i in range(1, 30):
+training_times = 10
+for i in range(1, training_times):
       my_first_army.training()
       my_first_army.recuperate()  # 训练一次后必须马上恢复体力才能得出正确的战力值
-print("招募并训练了(1)军团如下：")
+print("招募(1)军团，并且训练 %d 次：" % (training_times))
 my_first_army.simple_view()
 
 
-soldiers_of_army = 650000
+soldiers_of_army = 100000
 my_second_army = Army()
 my_second_army.recruit(soldiers_of_army)
 my_second_army.army_name = '陌刀队'
-print("招募了(2)军团如下：")
+print("\n招募(2)军团，不加训练：")
 my_second_army.simple_view()
 
 opponent = [my_first_army, my_second_army]

@@ -117,15 +117,15 @@ class Army:
     # 复杂模式查看军队 - 绘制军队全景图
     def overview(self):
 
+        textstr = '\t军团番号 - (%d) \n军团名称 - (%s)\n\n\t\t成立时间 - (%s)\n解散时间 - (%s)\n\n\t\t目前人数 - (%d)\n目前战力 - (%.2f)K\n平均体力 - (%.2f)' % \
+                  (self.army_code, self.army_name, \
+                   self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
+                   self.alives, self.cal_fighting_capacity()/1000, self.cal_average_power())
+
         if self.alives > 0:
 
             # 汇总显示
             fig = plt.figure(1)
-
-            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前战力 - (%.2f)K\n平均体力 - (%.2f)' % \
-                      (self.army_code, self.army_name, \
-                       self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                      self.alives, self.cal_fighting_capacity()/1000, self.cal_average_power())
 
             # these are matplotlib.patch.Patch properties
             props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
@@ -211,10 +211,12 @@ class Army:
         else:
 
             fig = plt.figure(3)
-            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n成立时间 - (%s)\n解散时间 - (%s)\n\n目前人数 - (%d)\n目前战力 - (%.2f)K\n平均体力 - (%.2f)' % \
+            """
+            textstr = '军团番号 - (%d) \n军团名称 - (%s)\n\n\t成立时间 - (%s)\n解散时间 - (%s)\n\n\t目前人数 - (%d)\n目前战力 - (%.2f)K\n平均体力 - (%.2f)' % \
                       (self.army_code, self.army_name, \
                        self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
                       self.alives, self.cal_fighting_capacity()/1000, self.cal_average_power())
+            """
             textstr = '此军队已经全部阵亡！\n' + textstr
 
             # these are matplotlib.patch.Patch properties
@@ -229,7 +231,7 @@ class Army:
     # 简易模式查看军队 - 命令行输出
     def simple_view(self):
 
-        textstr = '******\r军团番号 - (%d) \t军团名称 - (%s)\n成立时间 - (%s)\t解散日期 - (%s)\n当前人数 - (%d)\t当前战力 - (%.2f)K\t平均体力 - (%.2f)' % \
+        textstr = '==军团番号==(%d) \t军团名称 - (%s)\n\t成立时间 - (%s)\t解散日期 - (%s)\n\t当前人数 - (%d)\t当前战力 - (%.2f)K\t平均体力 - (%.2f)' % \
                   (self.army_code, self.army_name, \
                    self.created.strftime('%Y-%m-%d %H:%M:%S'),
                    self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \

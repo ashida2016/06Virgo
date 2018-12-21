@@ -28,12 +28,11 @@ class SaveReadArmy:
         # 确定要写入的文件路径
         # for ATOM
         # csv_path = os.getcwd() + '\\' + 'config\\all_atoms.csv'
-        self.fpath_army = os.getcwd() + '\\armies\\' + army.army_name + '-' + str(army.army_code) + '.json'
-        self.fpath_soldier = os.getcwd() + '\\armies\\' + army.army_name + '-' + str(army.army_code) + '-' + '士兵们.json'
+        # self.fpath_army = os.getcwd() + '\\armies\\' + army.army_name + '-' + str(army.army_code) + '.json'
+        # self.fpath_soldier = os.getcwd() + '\\armies\\' + army.army_name + '-' + str(army.army_code) + '-' + '士兵们.json'
         # for cmd Python
-        # csv_path = os.getcwd() + '\\' + '..\\config\\all_atoms.csv'
-        # self.fpath_army = os.getcwd() + '\\' + '..\\armies\\' + army.army_name + '-' + str(army.army_code) + '.json'
-        # self.fpath_soldier = os.getcwd() + '\\' + '..\\armies\\' + army.army_name + '-' + str(army.army_code) + '-' + '士兵们.json'
+        self.fpath_army = os.getcwd() + '\\..\\armies\\' + army.army_name + '-' + str(army.army_code) + '.json'
+        self.fpath_soldier = os.getcwd() + '\\..\\armies\\' + army.army_name + '-' + str(army.army_code) + '-' + '士兵们.json'
         # for PyCharm
         # self.fpath_army = '..\\armies\\' + army.army_name + '_' + str(army.army_code) + '.json'
         # self.fpath_soldier = '..\\armies\\' + army.army_name + '_' + str(army.army_code) + '_' + '士兵们.json'
@@ -63,11 +62,11 @@ class SaveReadArmy:
 
         # 确定要读出的文件路径
         # for ATOM
-        self.fpath_army = os.getcwd() + '\\armies\\' + name + '-' + str(code) + '.json'
-        self.fpath_soldier = os.getcwd() + '\\armies\\' + name + '-' + str(code) + '-' + '士兵们.json'
+        # self.fpath_army = os.getcwd() + '\\armies\\' + name + '-' + str(code) + '.json'
+        # self.fpath_soldier = os.getcwd() + '\\armies\\' + name + '-' + str(code) + '-' + '士兵们.json'
         # for cmd Python
-        # self.fpath_army = os.getcwd() + '\\..\\armies\\' + name + '-' + str(code) + '.json'
-        # self.fpath_soldier = os.getcwd() + '\\..\\armies\\' + name + '-' + str(code) + '-' + '士兵们.json'
+        self.fpath_army = os.getcwd() + '\\..\\armies\\' + name + '-' + str(code) + '.json'
+        self.fpath_soldier = os.getcwd() + '\\..\\armies\\' + name + '-' + str(code) + '-' + '士兵们.json'
         # for PyCharm
         # self.fp_army = '..\\armies\\' + name + '_' + str(code) + '.json'
         # self.fp_soldier = '..\\armies\\' + name + '_' + str(code) + '_' + '士兵们.json'
