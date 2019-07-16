@@ -23,9 +23,8 @@ from class_global_const import GlobalConst
 # 解决输出显示汉字乱码的问题
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 # print (sys.stdout.encoding)  # 确认当前的控制台显示字符的编码
-plt.rcParams['font.sans-serif']=['SimHei'] #用来正常显示中文标签
-plt.rcParams['axes.unicode_minus']=False #用来正常显示负号
-
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
 
 
 class Army:
@@ -41,7 +40,7 @@ class Army:
 
         self.soldiers = []          # 士兵个体
         self.alives = 0             # 军团存活人数
-        #self.fighting_capacity = 0  # 总战斗力     # 战力实时计算
+        # self.fighting_capacity = 0  # 总战斗力     # 战力实时计算
 
         return
 
@@ -118,9 +117,10 @@ class Army:
     def overview(self):
 
         textstr = '\t军团番号 - (%d) \n军团名称 - (%s)\n\n\t\t成立时间 - (%s)\n解散时间 - (%s)\n\n\t\t目前人数 - (%d)\n目前战力 - (%.2f)K\n平均体力 - (%.2f)' % \
-                  (self.army_code, self.army_name, \
-                   self.created.strftime('%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
-                   self.alives, self.cal_fighting_capacity()/1000, self.cal_average_power())
+                  (self.army_code, self.army_name,
+                   self.created.strftime(
+                       '%Y-%m-%d %H:%M:%S'), self.dismissed.strftime('%Y-%m-%d %H:%M:%S'),
+                   self.alives, self.cal_fighting_capacity() / 1000, self.cal_average_power())
 
         if self.alives > 0:
 
@@ -131,7 +131,8 @@ class Army:
             props = dict(boxstyle='round', facecolor='wheat', alpha=0.5)
 
             # place a text box in upper left in axes coords
-            plt.text(0.05, 0.5, textstr, fontsize=20,  horizontalalignment='left', verticalalignment='center', bbox=props)
+            plt.text(0.05, 0.5, textstr, fontsize=20,  horizontalalignment='left',
+                     verticalalignment='center', bbox=props)
 
             # 准备3个图 （ 一行三列 ）
             fig, axs = plt.subplots(1, 3)
@@ -151,7 +152,8 @@ class Army:
             # print(x)
             # print(y)
             axs[0].bar(x, y)
-            axs[0].set_xlabel('年龄 %d-%d 岁' % (self.cst.min_age, self.cst.max_age))
+            axs[0].set_xlabel('年龄 %d-%d 岁' %
+                              (self.cst.min_age, self.cst.max_age))
             axs[0].set_ylabel('该年龄的人数')
             axs[0].set_title('1)年龄分布图')
 
@@ -159,7 +161,7 @@ class Army:
             y = ['极大', '较大', '普通', '较小', '极小']
             y_pos = np.arange(len(y))
 
-            count = [0] * 5 # 划分 5 档显示
+            count = [0] * 5  # 划分 5 档显示
             for s in self.soldiers:
                 if s.is_alive:
                     if s.strength <= 20:
@@ -179,8 +181,9 @@ class Army:
             axs[1].set_yticklabels(y)
             axs[1].invert_yaxis()
 
-            axs[1].set_xlabel('每档人数 ' )
-            axs[1].set_ylabel('五档分类， 力气值范围 %d-%d ' % (self.cst.min_strength, self.cst.max_strength))
+            axs[1].set_xlabel('每档人数 ')
+            axs[1].set_ylabel('五档分类， 力气值范围 %d-%d ' %
+                              (self.cst.min_strength, self.cst.max_strength))
             axs[1].set_title('2)士兵力气分布图')
 
             # 图三: 战斗技巧分布图（散点图）
@@ -192,9 +195,9 @@ class Army:
                 if s.is_alive:
                     x.append(str(i))
                     y.append(s.skill)
-                    if s.skill < (self.cst.max_skill - self.cst.min_skill)/3 + self.cst.min_skill :
+                    if s.skill < (self.cst.max_skill - self.cst.min_skill) / 3 + self.cst.min_skill:
                         colors.append('green')
-                    elif s.skill > (self.cst.max_skill - self.cst.min_skill)/3*2 + self.cst.min_skill:
+                    elif s.skill > (self.cst.max_skill - self.cst.min_skill) / 3 * 2 + self.cst.min_skill:
                         colors.append('red')
                     else:
                         colors.append('yellow')
@@ -202,8 +205,9 @@ class Army:
 
             area = 3       # 原点面积固定
             axs[2].scatter(x, y, s=area, c=colors)
-            axs[2].set_xlabel('按每个士兵分布' )
-            axs[2].set_ylabel('三档分类，战斗技巧值范围 %d-%d ' % (self.cst.min_skill, self.cst.max_skill))
+            axs[2].set_xlabel('按每个士兵分布')
+            axs[2].set_ylabel('三档分类，战斗技巧值范围 %d-%d ' %
+                              (self.cst.min_skill, self.cst.max_skill))
             axs[2].set_title('2)战斗技巧分布图')
 
             plt.show()
@@ -223,7 +227,8 @@ class Army:
             props = dict(boxstyle='round', facecolor='red', alpha=0.5)
 
             # place a text box in upper left in axes coords
-            plt.text(0.05, 0.5, textstr, fontsize=20,  horizontalalignment='left', verticalalignment='center', bbox=props)
+            plt.text(0.05, 0.5, textstr, fontsize=20,  horizontalalignment='left',
+                     verticalalignment='center', bbox=props)
             plt.show()
 
         return
@@ -232,9 +237,9 @@ class Army:
     def simple_view(self):
 
         textstr = '==军团番号==(%d) \t军团名称 - (%s)\n\t成立时间 - (%s)\t解散日期 - (%s)\n\t当前人数 - (%d)\t当前战力 - (%.2f)K\t平均体力 - (%.2f)' % \
-                  (self.army_code, self.army_name, \
+                  (self.army_code, self.army_name,
                    self.created.strftime('%Y-%m-%d %H:%M:%S'),
-                   self.dismissed.strftime('%Y-%m-%d %H:%M:%S'), \
+                   self.dismissed.strftime('%Y-%m-%d %H:%M:%S'),
                    self.alives, self.cal_fighting_capacity(), self.cal_average_power())
         print(textstr)
 
@@ -318,7 +323,7 @@ class Army:
                 replaced += 1       # 用掉了一个补充名额
                 self.alives += 1    # 军队总存活人数 +1
 
-            if replaced >= numbers: # 当用完招聘名额时结束
+            if replaced >= numbers:  # 当用完招聘名额时结束
                 break
 
         return replaced   # 返回剩余的补充名额
