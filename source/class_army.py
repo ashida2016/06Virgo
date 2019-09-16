@@ -4,8 +4,8 @@
 # author by : （学员ID)
 
 # 目的:
-#
-   
+#   在 Deeping 中提交成功
+
 import os
 import sys
 import io
