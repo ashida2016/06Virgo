@@ -5,7 +5,7 @@
 
 # 目的:
 #
-
+   
 import os
 import sys
 import io
